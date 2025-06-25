@@ -141,6 +141,7 @@
                 display: block; /* Pour éviter un petit espace en dessous de l'image */
             }
             /* Style pour la note */
+            
             .film-rating {
                 position: absolute;
                 top: 10px;      /* MODIFIÉ : On positionne par rapport au HAUT */
@@ -170,7 +171,7 @@
                 {% if film.averageRating and film.averageRating > 0 %}
                 <div class="film-rating">{{ (film.averageRating * 10)|round|int }}%</div>
                 {% endif %}
-                <div class="mood-name-user">{{ film.originalTitle }}</div>
+                <div class="mood-name-user">{{ film.title_fr }}</div>
             </a>
             {% endfor %}
         </div>

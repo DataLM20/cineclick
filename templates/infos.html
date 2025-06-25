@@ -99,7 +99,9 @@
             font-family: "Forum", serif;
             /* font-weight: 400; */
             font-style: normal;
+            color: rgb(245, 245, 245);
         }
+        
     </style>
 </head>
 <body>
@@ -114,13 +116,13 @@
                 {% endif %}
             </div>
             <div class="info">
-                <h1>{{ film.originalTitle }}</h1>
+                <h1>{{ film.title_fr }}</h1>
                 <div class="meta">{{ film.startYear|int }} | {{ film.genres_list }} | {{ film.runtimeMinutes|int }} min |
                      Note : {{ "%.1f"|format(film.averageRating) }}/10 ({{ "{:,.0f}".format(film.numVotes)|replace(',', ' ') }} votes)</div>
 
                 <div class="section">
                     <strong>Synopsis :</strong>
-                    <p class="texte">{{ film.overview_text }}</p>
+                    <p class="texte">{{ film.overview_fr }}</p>
                 </div>
 
                 <div class="section">

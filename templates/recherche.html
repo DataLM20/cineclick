@@ -123,6 +123,25 @@
       background: #888;
       border-radius: 3px;
     }
+
+    .film-card {
+      position: relative; /* Très important pour le positionnement de la note */
+                display: block; /* Nécessaire pour que le lien se comporte comme un bloc */
+                color: #fff; /* Pour que le titre du film soit visible */
+                text-decoration: none; /* Pour enlever le soulignement du lien */
+    }
+    .film-rating {
+                position: absolute;
+                top: 10px;      /* MODIFIÉ : On positionne par rapport au HAUT */
+                right: 10px;     /* MODIFIÉ : On ajuste le positionnement à droite */
+                background: rgba(0, 0, 0, 0.8);
+                color: #ffcc00;
+                padding: 4px 8px; /* On ajuste le padding pour un look plus équilibré */
+                border-radius: 5px;
+                font-size: 1.1rem;
+                font-weight: bold;
+                border: 1px solid #ffcc00;
+            }
   </style>
 </head>
 <body>
@@ -140,7 +159,7 @@
     <input
       type="text"
       name="query"
-      placeholder="Entrez un titre, un genre, un acteur..."
+      placeholder="Entrez un titre"
       style="flex-grow: 1; max-width: 400px; padding: 10px; font-size: 1.2rem; border-radius: 8px; border: none;" />
   
     <button
@@ -156,9 +175,14 @@
     <div style="margin-bottom:40px; text-align:center;">
       <h2>Résultat de la recherche</h2>
       <a href="{{ url_for('film_infos', tconst=film.tconst) }}" class="film-card" style="display: inline-block;">
-          <img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}" alt="{{ film.primaryTitle }}">
-          <p>{{ film.primaryTitle }}</p>
+          <img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}" alt="{{ film.title_fr }}">
+          <p>{{ film.title_fr }}</p>
       </a>
+      <div style="margin-top: 20px;">
+        <a href="javascript:window.history.back()" style="color: #ffcc00; font-size: 1.2rem; text-decoration:none; border: 1px solid #ffcc00; padding: 8px 15px; border-radius: 5px;">
+            ← Retour
+        </a>
+    </div>
     </div>
   {% endif %}
 
@@ -168,8 +192,11 @@
       <div class="film-row">
         {% for film in films_by_genre[genre] %}
           <a href="{{ url_for('film_infos', tconst=film.tconst) }}" class="film-card">
-            <img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}" alt="{{ film.primaryTitle }}">
-            <p>{{ film.primaryTitle }}</p>
+            <img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}" alt="{{ film.title_fr }}">
+            <p>{{ film.title_fr }}</p>
+            {% if film.averageRating and film.averageRating > 0 %}
+              <div class="film-rating">{{ (film.averageRating * 10)|round|int }}%</div>
+            {% endif %}
           </a>
         {% endfor %}
       </div>

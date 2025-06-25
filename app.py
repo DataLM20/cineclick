@@ -82,7 +82,10 @@ def film_infos(tconst):
         "video_url": video_url,
         "startYear": row["startYear"],
         "averageRating": row["averageRating"],
-        "numVotes": row["numVotes"]
+        "note": row["averageRating"]*100,
+        "numVotes": row["numVotes"],
+        "overview_fr": row["overview_fr"],
+        "title_fr": row["title_fr"]
     }
 
     return render_template("infos.html", film=film, mood_origine=mood_origine, page_origine=page_origine)
@@ -96,6 +99,7 @@ def recherche():
         if filt.any():
             film_row = df.loc[filt].iloc[0]
             film = film_row.to_dict()
+        print(film)
     # Préparer aussi les films par genre à afficher (facultatif ici, selon ta template)
     genres = ['Action', 'Thriller', 'Comedy', 'Fantasy', 'Drama', 'Romance']
     films_by_genre = {}
@@ -261,7 +265,7 @@ def grouptofilm():
 @app.route('/autocomplete')
 def autocomplete():
     global movies_df # Assurez-vous que movies_df est accessible globalement
-
+    print(movies_df.columns)
     if movies_df is None:
         return jsonify([]) # Retourne une liste vide si les données ne sont pas chargées
 
@@ -275,8 +279,8 @@ def autocomplete():
     # .unique() pour éviter les doublons si votre dataset en a
     # .tolist() pour convertir le Series pandas en liste Python
     matching_titles = movies_df[
-        movies_df['originalTitle'].str.lower().str.contains(search_query, na=False)
-    ]['originalTitle'].unique().tolist()
+        movies_df['title_fr'].str.lower().str.contains(search_query, na=False)
+    ]['title_fr'].unique().tolist()
 
     # Trier les résultats et limiter le nombre de suggestions
     # Un tri simple alphabétique ou par pertinence (si vous aviez un score)
@@ -291,7 +295,7 @@ def get_movie_recommendations(movie_title, num_recommendations=5):
         return ["Erreur: Le modèle n'est pas chargé ou les données des films sont manquantes."]
 
     # Trouver l'index du film entré par l'utilisateur
-    matching_movies = movies_df[movies_df['originalTitle'].str.lower() == movie_title.lower()]
+    matching_movies = movies_df[movies_df['title_fr'].str.lower() == movie_title.lower()]
 
     if matching_movies.empty:
         return [f"Désolé, le film '{movie_title}' n'a pas été trouvé dans notre base de données. Veuillez vérifier l'orthographe ou essayer un autre film."]
