@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Trouver un cinéma</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: black;
+    color: #ffcc00;
+}
+
+/* BARRE RECHERCHE */
+.search-bar {
+    text-align: center;
+    padding: 15px;
+    background: rgba(0,0,0,0.8);
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 8px;
+    border: none;
+}
+
+.search-bar button {
+    padding: 10px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* CARTE */
+#map {
+    height: 90vh;
+}
+</style>
+</head>
+
+<body>
+
+<div class="search-bar">
+    <form method="POST">
+        <input type="text" name="ville" placeholder="Ex: Paris" required>
+        <button type="submit">Rechercher</button>
+    </form>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+// 📍 Carte par défaut (Paris)
+var map = L.map('map').setView([48.8566, 2.3522], 12);
+
+// 🗺️ Fond OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// 🎯 Si recherche → centrer
+{% if lat and lon %}
+    map.setView([{{ lat }}, {{ lon }}], 13);
+{% endif %}
+
+// 🎬 Ajouter les cinémas
+{% for cine in cinemas %}
+    L.marker([
+        {{ cine.lat if cine.lat else cine.center.lat }},
+        {{ cine.lon if cine.lon else cine.center.lon }}
+    ])
+    .addTo(map)
+    .bindPopup("🎬 {{ cine.tags.name if cine.tags and cine.tags.name else 'Cinéma' }}");
+{% endfor %}
+
+</script>
+
+</body>
+</html>

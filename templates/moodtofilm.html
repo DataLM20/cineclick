@@ -19,7 +19,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 28px;
     color: #fff;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.1);
     padding: 8px 15px;
     border-radius: 10px;
     z-index: 2;
@@ -42,7 +42,7 @@
             position: relative;
             z-index: 1;
             min-height: 100vh;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -204,15 +204,15 @@
             
             <!-- Ligne 1 (5 moods) -->
             <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="joyeux" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='joyeux.png') }}" alt="Joyeux" /><div class="mood-name-user">Envie de rire ?</div></button></form>
-            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="detente" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='stresse.jpg') }}" alt="Détente" /><div class="mood-name-user">Besoin de réconfort ?</div></button></form>
+            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="detente" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='stresse.jpg') }}" alt="Détente" /><div class="mood-name-user">Envie de réconfort ?</div></button></form>
             <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="animation" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='animation.jpg') }}" alt="Animation" /><div class="mood-name-user">Retour en enfance ?</div></button></form>
-            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="horreur" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='horreur.jpg') }}" alt="Horreur" /><div class="mood-name-user">Envie de se faire peur ?</div></button></form>
-            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="emotion" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='triste.png') }}" alt="Émotion" /><div class="mood-name-user">Une histoire qui touche en plein cœur ?</div></button></form>
+            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="horreur" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='horreur.jpg') }}" alt="Horreur" /><div class="mood-name-user">Envie d'un film d'horreur ?</div></button></form>
+            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="emotion" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='triste.png') }}" alt="Émotion" /><div class="mood-name-user">Envie d'un film romantique  ?</div></button></form>
             
             <!-- Ligne 2 (4 moods) -->
             <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="superheros" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='superheros.jpg') }}" alt="Super-Héros" /><div class="mood-name-user">Soirée Super-Héros ?</div></button></form>
             <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="adrenaline" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='adrenaline.jpg') }}" alt="Adrénaline" /><div class="mood-name-user">Adrénaline & Suspense ?</div></button></form>
-            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="inspiration" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='motivee.png') }}" alt="Inspiration" /><div class="mood-name-user">Une dose d'inspiration ?</div></button></form>
+            <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="inspiration" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='motivee.png') }}" alt="Inspiration" /><div class="mood-name-user">Envie d'un film inspirant ?</div></button></form>
             <form action="/moodtofilm" method="get"><input type="hidden" name="mood" value="evasion" /><button class="mood-card" type="submit"><img src="{{ url_for('static', filename='evasion.jpg') }}" alt="Evasion" /><div class="mood-name-user">Visiter un autre monde ?</div></button></form>
 
         </div>

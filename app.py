@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 
+
 def chercher_video_youtube(query, api_key):
     params = {
         "part": "snippet",
@@ -52,6 +53,52 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/geocodcine", methods=["GET", "POST"])
+def geocodcine():
+    cinemas = []
+    lat, lon = None, None
+
+    if request.method == "POST":
+        ville = request.form.get("ville")
+
+        try:
+            # 🔎 Géocodage ville → coordonnées
+            geo_url = f"https://nominatim.openstreetmap.org/search?q={ville}&format=json"
+            geo = requests.get(
+                geo_url,
+                headers={"User-Agent": "cineclik-app"}
+            ).json()
+
+            if geo:
+                lat = geo[0]["lat"]
+                lon = geo[0]["lon"]
+
+                # 🎬 Recherche cinémas (VERSION ROBUSTE)
+                overpass_url = "https://overpass-api.de/api/interpreter"
+                query = f"""
+                [out:json];
+                (
+                  node["amenity"="cinema"](around:10000,{lat},{lon});
+                  way["amenity"="cinema"](around:10000,{lat},{lon});
+                  relation["amenity"="cinema"](around:10000,{lat},{lon});
+                );
+                out center;
+                """
+
+                res = requests.post(overpass_url, data=query)
+                data = res.json()
+
+                cinemas = data.get("elements", [])
+
+                print("Cinémas trouvés :", len(cinemas))
+
+            else:
+                print("Ville non trouvée")
+
+        except Exception as e:
+            print("Erreur :", e)
+
+    return render_template("geocodcine.html", cinemas=cinemas, lat=lat, lon=lon)
 
 @app.route("/film/<tconst>")
 def film_infos(tconst):
@@ -239,7 +286,7 @@ def grouptofilm():
         similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
 
         df_group['similarity'] = similarities
-        top_films = df_group.sort_values(by="similarity", ascending=False).head(10)
+        top_films = df_group.sort_values(by="similarity", ascending=False).head(21)
 
         suggestions = [
             {
@@ -364,7 +411,7 @@ def filmtofilm():
 
 # Configuration Gemini
 genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 gemini_chat = model.start_chat(history=[])
 
 @app.route("/chat", methods=["GET", "POST"])
@@ -373,7 +420,8 @@ def chat():
         return render_template("chat.html")
     else:  # POST
         try:
-            user_input = request.json["message"]
+            data = request.get_json(force=True)
+            user_input = data.get("message", "")
             response = gemini_chat.send_message(user_input)
             return jsonify({"reply": response.text})
         except Exception as e:
