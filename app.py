@@ -22,6 +22,8 @@ import google.generativeai as genai
 
 app = Flask(__name__)  # 👈 DOIT être créé en premier
 app.secret_key = "UNE_AUTRE_CLE_SECRETE_FLASK"
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
 # ensuite seulement ProxyFix
 app.wsgi_app = ProxyFix(
@@ -76,16 +78,23 @@ except FileNotFoundError:
 @app.before_request
 def check_auth():
 
+    # laisser les fichiers statiques
     if request.path.startswith("/static"):
         return
 
+    #  arrivée après login PHP
     if request.args.get("login") == "ok":
-        session["user"] = "connected"
-        return
 
+        session["user"] = "connected"
+
+        #  IMPORTANT : nettoyer URL
+        return redirect("/")
+
+    #  utilisateur déjà connecté
     if "user" in session:
         return
 
+    #  sinon login PHP
     return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
