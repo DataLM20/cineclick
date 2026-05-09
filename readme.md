@@ -16,6 +16,7 @@ Son but : **réenchanter l’expérience cinéma en salle** grâce à des sugges
 - **🎭 Mood to Film** : recommandations basées sur les envies du moment (Text Mining + TF-IDF)
 - **🎞️ Film to Film** : suggestions de films similaires (algorithme K-Nearest Neighbors)
 - **👥 Group to Film** : recommandations pour un groupe de spectateurs (TF-IDF + similarité cosinus)
+- **👥 Geocodcine** : Trouver un cinema le plus proche de la ville donnée
 - **🤖 Chat CineClik** : assistant conversationnel intégré (via l’API Gemini)
 - **🎥 Bande-annonce** : intégration automatique des trailers via l’API YouTube
 - **🖥️ Interface** fluide avec Flask, HTML/CSS, JS et Select2
