@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, session
 import requests
 import random 
 import pandas as pd
 import joblib
+import hmac
+import hashlib
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
@@ -19,6 +21,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 app = Flask(__name__)  # 👈 DOIT être créé en premier
+app.secret_key = "UNE_AUTRE_CLE_SECRETE_FLASK"
 
 # ensuite seulement ProxyFix
 app.wsgi_app = ProxyFix(
@@ -26,6 +29,19 @@ app.wsgi_app = ProxyFix(
     x_prefix=1,
     x_host=1
 )
+
+
+SECRET_KEY = "CINECLICK_SUPER_SECRET_2026"
+
+def verify_token(user, token):
+    expected = hmac.new(
+        SECRET_KEY.encode(),
+        user.encode(),
+        hashlib.sha256
+    ).hexdigest()
+
+    return hmac.compare_digest(expected, token)
+
 
 
 def chercher_video_youtube(query, api_key):
@@ -57,11 +73,31 @@ except FileNotFoundError:
     recommender_pipeline = None
     movies_df = None
 
+@app.before_request
+def check_auth():
+    if request.path.startswith("/static"):
+        return
 
+    if "user" in request.args and "token" in request.args:
+
+        user = request.args.get("user")
+        token = request.args.get("token")
+
+        if verify_token(user, token):
+            session["user"] = user
+            return
+
+        return "Unauthorized", 401
+
+    if "user" not in session:
+        return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    if "user" not in session:
+        return redirect("https://datanovation.fr/cineclick.php")
+    
+    return render_template("index.html", user=session.get("user"))
 
 
 @app.route("/geocodcine", methods=["GET", "POST"])
