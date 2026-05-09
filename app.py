@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 app = Flask(__name__)  # 👈 DOIT être créé en premier
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "CHANGE_ME_ULTRA_SECRET_2026")
+app.config['SECRET_KEY'] = 'UNE_CLE_LONGUE_ULTRA_SECURE_123456789'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
@@ -77,28 +77,11 @@ except FileNotFoundError:
 
 @app.before_request
 def check_auth():
-
-    if request.path.startswith("/static"):
+    if request.path.startswith("/static") or request.path == "/login":
         return
 
-    # déjà connecté → OK
-    if session.get("user"):
-        return
-
-    # si token reçu → login Flask
-    user = request.args.get("user")
-    token = request.args.get("token")
-
-    if user and token and verify_token(user, token):
-        session["user"] = user
-        return
-
-    # sinon accès libre à login route seulement
-    if request.path in ["/login", "/auth"]:
-        return
-
-    # sinon redirection login PHP
-    return redirect("https://datanovation.fr/cineclick.php")
+    if "user" not in session:
+        return redirect("/login")
 
 @app.route('/')
 def home():
@@ -107,6 +90,25 @@ def home():
     
     return render_template("index.html", user=session.get("user"))
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        users = {
+            "admin": "dataone26??",
+            "demo": "1234",
+            "Audreycine": "Cine2026??liora"
+        }
+
+        if username in users and users[username] == password:
+            session["user"] = username
+            return redirect("/")
+        else:
+            return render_template("login.html", error=True)
+
+    return render_template("login.html")
 
 @app.route("/geocodcine", methods=["GET", "POST"])
 def geocodcine():
