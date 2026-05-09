@@ -19,6 +19,7 @@ import google.generativeai as genai
 
 app = Flask(__name__)
 app.config['APPLICATION_ROOT'] = '/cineclik'
+app.config["APPLICATION_ROOT"] = "/cineclik"
 
 app.wsgi_app = DispatcherMiddleware(
     Response('Not Found', status=404),
