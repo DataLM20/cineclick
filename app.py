@@ -79,11 +79,13 @@ def check_auth():
     if request.path.startswith("/static"):
         return
 
-    # si déjà connecté → OK
+    if request.args.get("login") == "ok":
+        session["user"] = "connected"
+        return
+
     if "user" in session:
         return
 
-    # sinon redirect login
     return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
