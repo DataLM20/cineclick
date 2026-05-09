@@ -20,8 +20,10 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+load_dotenv()
+
 app = Flask(__name__)  # 👈 DOIT être créé en premier
-app.secret_key = "cineclick_2026_super_secret_key_!@#$12345"
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
@@ -33,7 +35,7 @@ app.wsgi_app = ProxyFix(
 )
 
 
-SECRET_KEY = "CINECLICK_SUPER_SECRET_2026"
+SECRET_KEY = os.getenv("TOKEN_SECRET_KEY")
 
 def verify_token(user, token):
     expected = hmac.new(
@@ -60,7 +62,7 @@ def chercher_video_youtube(query, api_key):
         return f"https://www.youtube.com/embed/{items[0]['id']['videoId']}"
     return None
 
-load_dotenv()
+
 
 try:
     recommender_pipeline = joblib.load('movie_recommender_pipeline_weighted.pkl')
