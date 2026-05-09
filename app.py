@@ -4,6 +4,7 @@ import random
 import pandas as pd
 import joblib
 
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from collections import Counter
@@ -26,6 +27,7 @@ app.wsgi_app = DispatcherMiddleware(
     {'/cineclik': app.wsgi_app}
 )
 
+app.wsgi_app = ProxyFix(app.wsgi_app, x_prefix=1)
 
 def chercher_video_youtube(query, api_key):
     params = {
