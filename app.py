@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 app = Flask(__name__)  # 👈 DOIT être créé en premier
-app.config['SECRET_KEY'] = 'UNE_CLE_LONGUE_ULTRA_SECURE_123456789'
+app.secret_key = "cineclick_2026_super_secret_key_!@#$12345"
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
@@ -82,6 +82,13 @@ def check_auth():
 
     if "user" not in session:
         return redirect("/login")
+
+@app.route("/cineclick")
+def cineclick():
+    if "user" not in session:
+        return redirect("/login")
+
+    return render_template("cineclick.html", user=session["user"])
 
 @app.route('/')
 def home():
@@ -363,7 +370,10 @@ def grouptofilm():
         genre_count=genre_count  # (optionnel si tu veux l'afficher dans le template)
     )
 
-
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 
 
 @app.route('/autocomplete')
