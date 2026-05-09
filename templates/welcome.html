@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Welcome to the world of data</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #000;
+    color: #fff;
+}
+
+/* HERO */
+.hero {
+    height: 60vh;
+    background-image: url("welcome.jpeg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+}
+
+/* NAV */
+.nav {
+    position: absolute;
+    top: 25px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.menu a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #fff;
+    opacity: 0.8;
+}
+
+.home-btn {
+    border: 1px solid #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+/* HERO TEXT */
+.hero-text {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-size: 36px;
+    z-index: 2;
+}
+
+/* CONTENT */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 80px 20px;
+}
+
+.logo {
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+    <div class="nav">
+        <div class="logo">Datanovation</div>
+        <div class="menu">
+            <a href="welcome.html">Welcome to the world of data </a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="blog.html">Blog</a>
+            <a href="index.html" class="home-btn">Home</a>
+        </div>
+    </div>
+
+    <div class="hero-text">Welcome to the world of data</div>
+</div>
+
+<div class="container">
+    <p>
+    Data engineering is about building reliable systems to move and transform data at scale.
+    </p>
+</div>
+
+</body>
+</html>
