@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Connexion Cineclick</title>
+
+<style>
+body{
+    background:#0f172a;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.box{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    width:320px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1{
+    margin-top:0;
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.error{
+    color:red;
+    text-align:center;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>Cineclick</h1>
+
+<form method="POST">
+
+<input type="text" name="username" placeholder="Utilisateur" required>
+
+<input type="password" name="password" placeholder="Mot de passe" required>
+
+<button type="submit">Connexion</button>
+
+</form>
+
+{% if error %}
+<div class="error">
+Identifiants incorrects
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>
