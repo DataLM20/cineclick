@@ -4,7 +4,7 @@ import random
 import pandas as pd
 import joblib
 
-
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from collections import Counter
@@ -18,16 +18,7 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-app = Flask(__name__)
-app.config['APPLICATION_ROOT'] = '/cineclik'
-app.config["APPLICATION_ROOT"] = "/cineclik"
-
-app.wsgi_app = DispatcherMiddleware(
-    Response('Not Found', status=404),
-    {'/cineclik': app.wsgi_app}
-)
-
-
+app.wsgi_app = ProxyFix(app.wsgi_app, x_prefix=1)
 
 def chercher_video_youtube(query, api_key):
     params = {
@@ -443,5 +434,3 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-app.config["APPLICATION_ROOT"] = "/cineclik"
