@@ -4,6 +4,8 @@ import random
 import pandas as pd
 import joblib
 
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.wrappers import Response
 from collections import Counter
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
@@ -15,6 +17,13 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+app = Flask(__name__)
+app.config['APPLICATION_ROOT'] = '/cineclik'
+
+app.wsgi_app = DispatcherMiddleware(
+    Response('Not Found', status=404),
+    {'/cineclik': app.wsgi_app}
+)
 
 
 def chercher_video_youtube(query, api_key):
