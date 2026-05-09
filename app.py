@@ -18,7 +18,15 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-app.wsgi_app = ProxyFix(app.wsgi_app, x_prefix=1)
+app = Flask(__name__)  # 👈 DOIT être créé en premier
+
+# ensuite seulement ProxyFix
+app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_prefix=1,
+    x_host=1
+)
+
 
 def chercher_video_youtube(query, api_key):
     params = {
