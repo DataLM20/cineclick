@@ -2,157 +2,44 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>CineClik</title>
+<title>Cineclik</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
-
-<style>
-/* =========================
-   BASE
-========================= */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Bebas Neue', sans-serif;
-  overflow: hidden;
-  background: black;
-}
-
-/* =========================
-   VIDEO BACKGROUND
-========================= */
-.bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-/* overlay pour éviter écran noir / améliorer lisibilité */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: -1;
-}
-
-/* =========================
-   MENU
-========================= */
-#menu-toggle {
-  display: none;
-}
-
-/* bouton menu */
-.menu-button {
-  position: fixed;
-  top: 20px;
-  right: 25px;
-  font-size: 2.5rem;
-  cursor: pointer;
-  z-index: 1001;
-  color: #ffcc00;
-  text-shadow: 0 0 10px black;
-}
-
-/* sidebar */
-.side-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: 100vh;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: -2px 0 12px rgba(0,0,0,0.2);
-  transform: translateX(100%);
-  transition: 0.3s ease;
-  padding: 70px 25px;
-  box-sizing: border-box;
-  z-index: 1000;
-}
-
-/* ouverture menu */
-#menu-toggle:checked + .menu-button + .side-menu {
-  transform: translateX(0);
-}
-
-/* liens */
-.side-menu a {
-  display: block;
-  padding: 14px 0;
-  text-decoration: none;
-  color: #111;
-  font-size: 1.3rem;
-  border-bottom: 1px solid #ddd;
-  transition: 0.2s;
-}
-
-.side-menu a:hover {
-  color: #ffcc00;
-  padding-left: 5px;
-}
-
-/* =========================
-   TITRE CENTRE (IMPORTANT)
-========================= */
-.hero-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  z-index: 2;
-}
-
-.hero-center h1 {
-  font-size: 4rem;
-  margin: 0;
-  color: #ffcc00;
-  text-shadow: 0 0 20px black;
-}
-
-.hero-center p {
-  font-size: 1.5rem;
-  color: white;
-  opacity: 0.9;
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='style_ftf.css') }}">
 
 </head>
 
 <body>
 
-<!-- VIDEO -->
-<video autoplay muted loop class="bg-video">
-  <source src="{{ url_for('static', filename='cine.mp4') }}" type="video/mp4" />
-</video>
+  <!-- 🎬 Vidéo background -->
+  <video autoplay muted loop class="bg-video">
+    <source src="{{ url_for('static', filename='cine.mp4') }}" type="video/mp4" />
+    Votre navigateur ne supporte pas la vidéo.
+  </video>
 
-<!-- OVERLAY -->
-<div class="overlay"></div>
+  <!-- 🌑 Overlay pour lisibilité -->
+  <div class="overlay"></div>
 
-<!-- CENTRE HERO -->
-<div class="hero-center">
-  <h1>CineClik</h1>
-  <p>Découvrez votre prochain film</p>
-</div>
+  <!-- ☰ MENU -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-button">☰ MENU</label>
 
-<!-- MENU -->
-<input type="checkbox" id="menu-toggle" />
-<label for="menu-toggle" class="menu-button">☰ MENU</label>
+  <nav class="side-menu">
+    <a href="{{ url_for('recherche') }}">🔍 Rechercher un film</a>
+    <a href="{{ url_for('filmtofilm') }}">🎬 Recommandation par film</a>
+    <a href="{{ url_for('moodtofilm') }}">😊 Recommandation par humeur</a>
+    <a href="{{ url_for('grouptofilm') }}">👥 Recommandation en groupe</a>
+    <a href="{{ url_for('geocodcine') }}">🎥 Trouver un film au cinema</a>
+    <a href="{{ url_for('chat') }}">💬 Parler à l’assistant</a>
+  </nav>
 
-<nav class="side-menu">
-  <a href="{{ url_for('recherche') }}">🔍 Rechercher un film</a>
-  <a href="{{ url_for('filmtofilm') }}">🎬 Recommandation par film</a>
-  <a href="{{ url_for('moodtofilm') }}">😊 Recommandation par humeur</a>
-  <a href="{{ url_for('grouptofilm') }}">👥 Recommandation en groupe</a>
-  <a href="{{ url_for('geocodcine') }}">🎥 Trouver un cinéma</a>
-  <a href="{{ url_for('chat') }}">💬 Assistant IA</a>
-</nav>
+  <!-- 🎯 CONTENU PRINCIPAL -->
+  <div class="container">
+
+    <h1>🎬 CineClik</h1>
+    <p class="subtitle">Découvrez votre prochain film</p>
+
+  </div>
 
 </body>
 </html>
