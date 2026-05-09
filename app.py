@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 app = Flask(__name__)  # 👈 DOIT être créé en premier
-app.secret_key = "UNE_AUTRE_CLE_SECRETE_FLASK"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-moi")
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
@@ -77,23 +77,24 @@ except FileNotFoundError:
 
 @app.before_request
 def check_auth():
-
     if request.path.startswith("/static"):
         return
 
-    # 🔥 autoriser login callback UNE SEULE FOIS
-    if request.args.get("login") == "ok":
-
-        session["user"] = "connected"
-
-        # IMPORTANT : éviter boucle
-        return redirect("/")
-
-    # 🔥 si session OK → continuer
+    # déjà connecté
     if session.get("user"):
         return
 
-    # 🔥 sinon redirect login
+    # login via token
+    user = request.args.get("user")
+    token = request.args.get("token")
+
+    if user and token:
+        if verify_token(user, token):
+            session["user"] = user
+            return
+        return "Unauthorized", 401
+
+    # sinon redirect login
     return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
