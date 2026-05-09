@@ -72,25 +72,24 @@ except FileNotFoundError:
     print("Assurez-vous d'avoir exécuté 'train_and_save_model.py' au préalable.")
     recommender_pipeline = None
     movies_df = None
-
+    
 @app.before_request
 def check_auth():
+
+    # 🔓 laisser passer les fichiers statiques
     if request.path.startswith("/static"):
         return
 
-    if "user" in request.args and "token" in request.args:
+    # 🔓 laisser passer login PHP si besoin
+    if request.path.startswith("/login") or request.path.startswith("/auth"):
+        return
 
-        user = request.args.get("user")
-        token = request.args.get("token")
+    # 🔐 si utilisateur connecté → OK
+    if "user" in session:
+        return
 
-        if verify_token(user, token):
-            session["user"] = user
-            return
-
-        return "Unauthorized", 401
-
-    if "user" not in session:
-        return redirect("https://datanovation.fr/cineclick.php")
+    # 🔐 sinon redirect vers login PHP
+    return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
 def home():
