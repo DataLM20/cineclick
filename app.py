@@ -78,23 +78,22 @@ except FileNotFoundError:
 @app.before_request
 def check_auth():
 
-    # laisser les fichiers statiques
     if request.path.startswith("/static"):
         return
 
-    #  arrivée après login PHP
+    # 🔥 autoriser login callback UNE SEULE FOIS
     if request.args.get("login") == "ok":
 
         session["user"] = "connected"
 
-        #  IMPORTANT : nettoyer URL
+        # IMPORTANT : éviter boucle
         return redirect("/")
 
-    #  utilisateur déjà connecté
-    if "user" in session:
+    # 🔥 si session OK → continuer
+    if session.get("user"):
         return
 
-    #  sinon login PHP
+    # 🔥 sinon redirect login
     return redirect("https://datanovation.fr/cineclick.php")
 
 @app.route('/')
