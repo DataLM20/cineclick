@@ -1,7 +1,7 @@
 # 🎬 CineClik – Recommandation intelligente de films
 
 ## 🚀 À propos du projet
-**CineClik** est une application web de recommandation de films développée par l'équipe **DataMinder** (Aïsha, Karim, Jordan et Sylvain) dans le cadre d’un projet de data analyse.  
+**CineClik** est une application web de recommandation de films développée par des apprenants Datascientest/Liora (Audrey, Karim) dans le cadre d’un projet de data Enginieer.  
 Son but : **réenchanter l’expérience cinéma en salle** grâce à des suggestions personnalisées, interactives et intelligentes.
 
 🎯 Ce prototype fonctionnel propose une interface simple pour :
@@ -32,7 +32,7 @@ Son but : **réenchanter l’expérience cinéma en salle** grâce à des sugges
 
 ## 🔍 Étude de marché & choix des filtres
 
-Suite à une analyse Ipsos 2025 sur les préférences des spectateurs français :
+Suite à une analyse Ipsos 2026 sur les préférences des spectateurs français :
 
 **Filtres de nettoyage appliqués :**
 - ✅ Langues conservées : Français & Anglais
@@ -71,7 +71,7 @@ cineclik/
 ## 🧪 Lancer le projet en local
 
 ```bash
-git clone https://github.com/SylvainB59/cineclik.git
+git clone 
 cd cineclik
 python3 -m venv ../venv
 source ../venv/bin/activate  # ou .\venv\Scripts\activate sur Windows
