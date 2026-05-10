@@ -123,3 +123,4 @@ Explications des modifications :
         Le FeatureWeightingTransformer prendra df, produira une Series de textes pondérés, et cette Series sera ensuite passée au TfidfVectorizer pour vectorisation.
     Fichiers sauvegardés : J'ai renommé les fichiers .pkl et .csv pour indiquer qu'ils incluent la pondération (_weighted)..
 '''
+
