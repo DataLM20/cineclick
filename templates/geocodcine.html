@@ -57,27 +57,27 @@ body {
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-// 📍 Carte par défaut (Paris)
+//  Carte par défaut (Paris)
 var map = L.map('map').setView([48.8566, 2.3522], 12);
 
-// 🗺️ Fond OpenStreetMap
+//  Fond OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// 🎯 Si recherche → centrer
+//  Si recherche → centrer
 {% if lat and lon %}
     map.setView([{{ lat }}, {{ lon }}], 13);
 {% endif %}
 
-// 🎬 Ajouter les cinémas
+//  Ajouter les cinémas
 {% for cine in cinemas %}
     L.marker([
         {{ cine.lat if cine.lat else cine.center.lat }},
         {{ cine.lon if cine.lon else cine.center.lon }}
     ])
     .addTo(map)
-    .bindPopup("🎬 {{ cine.tags.name if cine.tags and cine.tags.name else 'Cinéma' }}");
+    .bindPopup(" {{ cine.tags.name if cine.tags and cine.tags.name else 'Cinéma' }}");
 {% endfor %}
 
 </script>

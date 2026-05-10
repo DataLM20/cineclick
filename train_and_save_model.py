@@ -121,5 +121,5 @@ Explications des modifications :
     pipeline.fit(df) :
         Contrairement à avant où on passait seulement df['features'], maintenant on passe le DataFrame df entier à pipeline.fit(). C'est parce que FeatureWeightingTransformer a besoin d'accéder à plusieurs colonnes (overview_clean, directors_name, etc.) pour faire son travail.
         Le FeatureWeightingTransformer prendra df, produira une Series de textes pondérés, et cette Series sera ensuite passée au TfidfVectorizer pour vectorisation.
-    Fichiers sauvegardés : J'ai renommé les fichiers .pkl et .csv pour indiquer qu'ils incluent la pondération (_weighted).
+    Fichiers sauvegardés : J'ai renommé les fichiers .pkl et .csv pour indiquer qu'ils incluent la pondération (_weighted)..
 '''

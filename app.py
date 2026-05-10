@@ -127,7 +127,7 @@ def geocodcine():
         ville = request.form.get("ville")
 
         try:
-            # 🔎 Géocodage ville → coordonnées
+            #  Géocodage ville → coordonnées
             geo_url = f"https://nominatim.openstreetmap.org/search?q={ville}&format=json"
             geo = requests.get(
                 geo_url,
@@ -138,7 +138,7 @@ def geocodcine():
                 lat = geo[0]["lat"]
                 lon = geo[0]["lon"]
 
-                # 🎬 Recherche cinémas (VERSION ROBUSTE)
+                #  Recherche cinémas (VERSION ROBUSTE)
                 overpass_url = "https://overpass-api.de/api/interpreter"
                 query = f"""
                 [out:json];

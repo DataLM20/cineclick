@@ -1,29 +1,29 @@
-# 🎬 CineClik – Recommandation intelligente de films
+#  CineClik – Recommandation intelligente de films
 
-## 🚀 À propos du projet
+##  À propos du projet
 **CineClik** est une application web de recommandation de films développée par des apprenants Datascientest/Liora (Audrey, Karim) dans le cadre d’un projet de data Enginieer.  
 Son but : **réenchanter l’expérience cinéma en salle** grâce à des suggestions personnalisées, interactives et intelligentes.
 
-🎯 Ce prototype fonctionnel propose une interface simple pour :
+ Ce prototype fonctionnel propose une interface simple pour :
 - Explorer 3 fonctionnalités de recommandation innovantes
 - Visualiser des KPI pertinents
 - Offrir un service digital complémentaire au cinéma traditionnel
 
 ---
 
-## 👨‍💻 Fonctionnalités principales
+##  Fonctionnalités principales
 
-- **🎭 Mood to Film** : recommandations basées sur les envies du moment (Text Mining + TF-IDF)
-- **🎞️ Film to Film** : suggestions de films similaires (algorithme K-Nearest Neighbors)
-- **👥 Group to Film** : recommandations pour un groupe de spectateurs (TF-IDF + similarité cosinus)
-- **👥 Geocodcine** : Trouver un cinema le plus proche de la ville donnée
-- **🤖 Chat CineClik** : assistant conversationnel intégré (via l’API Gemini)
-- **🎥 Bande-annonce** : intégration automatique des trailers via l’API YouTube
-- **🖥️ Interface** fluide avec Flask, HTML/CSS, JS et Select2
+- ** Mood to Film** : recommandations basées sur les envies du moment (Text Mining + TF-IDF)
+- ** Film to Film** : suggestions de films similaires (algorithme K-Nearest Neighbors)
+- ** Group to Film** : recommandations pour un groupe de spectateurs (TF-IDF + similarité cosinus)
+- ** Geocodcine** : Trouver un cinema le plus proche de la ville donnée
+- ** Chat CineClik** : assistant conversationnel intégré (via l’API Gemini)
+- ** Bande-annonce** : intégration automatique des trailers via l’API YouTube
+- ** Interface** fluide avec Flask, HTML/CSS, JS et Select2
 
 ---
 
-## 🔒 Sécurité & bonnes pratiques
+##  Sécurité & bonnes pratiques
 
 - Les **clés API** (Gemini et YouTube) sont sécurisées dans un fichier `.env`
 - Utilisation du module `python-dotenv`
@@ -31,20 +31,20 @@ Son but : **réenchanter l’expérience cinéma en salle** grâce à des sugges
 
 ---
 
-## 🔍 Étude de marché & choix des filtres
+##  Étude de marché & choix des filtres
 
 Suite à une analyse Ipsos 2026 sur les préférences des spectateurs français :
 
 **Filtres de nettoyage appliqués :**
-- ✅ Langues conservées : Français & Anglais
-- ❌ Suppression : téléfilms, séries, films adultes, documentaires, émissions
-- ❌ Genres exclus : biographie, musical, news
-- 🕒 Films trop courts et films antérieurs à 1990 supprimés
-- ⭐ Seuls les films avec une note ≥ 5/10 ont été conservés
+-  Langues conservées : Français & Anglais
+-  Suppression : téléfilms, séries, films adultes, documentaires, émissions
+-  Genres exclus : biographie, musical, news
+-  Films trop courts et films antérieurs à 1990 supprimés
+-  Seuls les films avec une note ≥ 5/10 ont été conservés
 
 ---
 
-## ⚙️ Technologies utilisées
+##  Technologies utilisées
 
 - Python, Pandas, Scikit-learn
 - Flask (serveur web), HTML/CSS/JS, Select2
@@ -53,7 +53,7 @@ Suite à une analyse Ipsos 2026 sur les préférences des spectateurs français 
 
 ---
 
-## 📁 Structure du projet
+##  Structure du projet
 
 cineclik/
 │
@@ -69,7 +69,7 @@ cineclik/
 
 ---
 
-## 🧪 Lancer le projet en local
+##  Lancer le projet en local
 
 ```bash
 git clone 
