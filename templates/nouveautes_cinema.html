@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouveautés cinéma</title>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      color: white;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    .cineclik-logo {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 28px;
+      color: #fff;
+      text-decoration: none;
+      z-index: 2;
+    }
+
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(1.1) contrast(1.1);
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 50px 30px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffcc00;
+      margin-bottom: 40px;
+    }
+
+   .film-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 cartes par ligne */
+    gap: 25px;
+    width: 100%;
+    }
+
+    .film-card {
+      min-width: 160px;
+      max-width: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      color: white;
+      position: relative;
+    }
+
+    .film-card:hover {
+      transform: scale(1.05);
+      background: rgba(255, 204, 0, 0.8);
+      color: black;
+    }
+
+    .film-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .film-rating {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.8);
+      color: #ffcc00;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: 1px solid #ffcc00;
+    }
+
+    @media (max-width: 1200px) {
+    .film-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    }
+
+    @media (max-width: 768px) {
+    .film-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<a href="/" class="cineclik-logo">CineClik</a>
+
+<video class="bg-video" autoplay muted loop>
+  <source src="{{ url_for('static', filename='fond.mp4') }}" type="video/mp4" />
+</video>
+
+<div class="container">
+
+  <h1>🎬 Nouveautés cinéma</h1>
+
+  <div class="film-row">
+    {% for film in films %}
+      <a href="/film/{{ film.tconst }}" class="film-card">
+
+        {% if film.poster_path %}
+            <img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}">
+        {% else %}
+            <img src="https://via.placeholder.com/200x300?text=No+Image">
+        {% endif %}
+
+        {% if film.rating %}
+          <div class="film-rating">
+            {{ (film.rating * 10)|round|int }}%
+          </div>
+        {% endif %}
+
+        <p>{{ film.title }}</p>
+
+      </a>
+    {% endfor %}
+  </div>
+
+</div>
+
+</body>
+</html>

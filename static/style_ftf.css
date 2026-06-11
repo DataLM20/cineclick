@@ -117,23 +117,28 @@ button {
 }
 
 .film-card {
-    min-width: 150px;
-    max-width: 200px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 10px;
     text-align: center;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition:  0.3s ease;
     text-decoration: none;
     color: white;
+    transition: 0.3s;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
 .film-card:hover {
     transform: scale(1.05);
-    background: rgb(255, 204, 0, 0.8);
+    background: rgba(255, 204, 0, 0.8);
     color: black;
+}
+
+.film-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .box a{

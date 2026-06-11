@@ -22,8 +22,9 @@ import google.generativeai as genai
 
 load_dotenv()
 
-app = Flask(__name__)  # 👈 DOIT être créé en premier
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app = Flask(__name__)  #  DOIT être créé en premier
+#app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.secret_key = "cineclick_dev_secret_123"
 app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
@@ -100,19 +101,20 @@ def home():
 
 @app.route("/nouveautes-cinema")
 def nouveautes_cinema():
-    df_sorted = df.sort_values(by="startYear", ascending=False)
-    df_latest = df_sorted.head(30)
+
+    df_sorted = df.sort_values(by="startYear", ascending=False).head(30)
 
     films = []
 
-    for _, row in df_latest.iterrows():
+    for _, row in df_sorted.iterrows():
+
+        poster = row["poster_path"]
+
         films.append({
             "tconst": row["tconst"],
             "title": row["originalTitle"],
-            "poster": "https://image.tmdb.org/t/p/w500" + str(row["poster_path"]) if pd.notna(row["poster_path"]) else "",
-            "actors": row["actors_names"],
-            "directors": row["directors_name"],
-            "year": row["startYear"]
+            "poster_path": poster if pd.notna(poster) else "",
+            "rating": float(row["averageRating"]) if pd.notna(row["averageRating"]) else 0
         })
 
     return render_template("nouveautes_cinema.html", films=films)
