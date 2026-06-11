@@ -98,6 +98,26 @@ def home():
     
     return render_template("index.html", user=session.get("user"))
 
+@app.route("/nouveautes-cinema")
+def nouveautes_cinema():
+    df_sorted = df.sort_values(by="startYear", ascending=False)
+    df_latest = df_sorted.head(30)
+
+    films = []
+
+    for _, row in df_latest.iterrows():
+        films.append({
+            "tconst": row["tconst"],
+            "title": row["originalTitle"],
+            "poster": "https://image.tmdb.org/t/p/w500" + str(row["poster_path"]) if pd.notna(row["poster_path"]) else "",
+            "actors": row["actors_names"],
+            "directors": row["directors_name"],
+            "year": row["startYear"]
+        })
+
+    return render_template("nouveautes_cinema.html", films=films)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -280,6 +300,12 @@ def recommander_films_humeur(humeur_choisie, dataframe_films, page=1, recos_par_
     start_index = (page - 1) * recos_par_page
     end_index = start_index + recos_par_page
     return df_tries.iloc[start_index:end_index]
+
+
+
+
+
+
 
 @app.route("/moodtofilm")
 def moodtofilm():
