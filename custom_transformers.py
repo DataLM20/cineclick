@@ -31,4 +31,3 @@ class FeatureWeightingTransformer(BaseEstimator, TransformerMixin):
             weighted_texts.append(' '.join(combined_text))
 
         return pd.Series(weighted_texts, index=X.index)
-    

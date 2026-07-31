@@ -4,8 +4,6 @@ from sklearn.pipeline import Pipeline
 import joblib
 import os
 
-# Création du dossier models s'il n'existe pas
-# os.makedirs("models", exist_ok=True)
 
 # Chargement et préparation des données
 df = pd.read_csv("df_pour_ml.csv")
@@ -27,4 +25,4 @@ joblib.dump(pipeline, "tfidf_pipeline.joblib")
 joblib.dump(tfidf_matrix, "tfidf_matrix.joblib")
 df.to_csv("df_clean.csv", index=False)
 
-print("✅ Pipeline et matrice TF-IDF enregistrés.")
+print("Pipeline et matrice TF-IDF enregistrés.")

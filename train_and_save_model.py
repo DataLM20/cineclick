@@ -5,8 +5,10 @@ from sklearn.pipeline import Pipeline
 # from sklearn.base import BaseEstimator, TransformerMixin # Pour le CustomTransformer
 import joblib # Pour sauvegarder et charger les modèles
 import re # Pour nettoyer le texte des acteurs/genres
-
+import os
 from custom_transformers import FeatureWeightingTransformer
+
+BASE_DIR = os.getenv("CINECLICK_BASE_DIR", "/home/izak/cineclick")
 
 # # --- 1. Custom Transformer pour la pondération des features ---
 # class FeatureWeightingTransformer(BaseEstimator, TransformerMixin):
@@ -55,7 +57,7 @@ from custom_transformers import FeatureWeightingTransformer
 
 print("Chargement des données...")
 # Charger le dataset étendu
-df = pd.read_csv('df_pour_ml.csv')
+df = pd.read_csv(os.path.join(BASE_DIR, 'df_pour_ml.csv'))
 df = df.fillna('') # Remplir les NaN avec des chaînes vides pour éviter les erreurs
 
 print("Aperçu des données d'entraînement:\n", df[['originalTitle', 'overview_clean', 'directors_name', 'genres_list', 'actors_names']].head())
@@ -98,12 +100,158 @@ print("Pipeline entraînée avec succès.")
 
 # --- 4. Sauvegarde de la Pipeline et du DataFrame des films ---
 # Sauvegarder toute la pipeline
-joblib.dump(pipeline, 'movie_recommender_pipeline_weighted.pkl')
+joblib.dump(
+    pipeline,
+    os.path.join(BASE_DIR, 'movie_recommender_pipeline_weighted.pkl')
+)
 print("Pipeline sauvegardée sous 'movie_recommender_pipeline_weighted.pkl'")
 
 # Sauvegarder le DataFrame original des films car le modèle retourne des indices
 # et nous avons besoin de ce DF pour mapper les indices aux titres/infos des films.
-df.to_csv('movies_data_for_app_weighted.csv', index=False)
+df.to_csv(
+    os.path.join(BASE_DIR, 'movies_data_for_app_weighted.csv'),
+    index=False
+)
+
+
+# ============================================================
+# 5. Entraînement TF-IDF pour Group To Film
+# ============================================================
+
+print("\nEntraînement du modèle TF-IDF pour Group To Film...")
+
+df_group_path = os.path.join(BASE_DIR, "df_clean.csv")
+
+if not os.path.exists(df_group_path):
+    raise FileNotFoundError(
+        f"Le fichier nécessaire à Group To Film est introuvable : "
+        f"{df_group_path}"
+    )
+
+df_group = pd.read_csv(
+    df_group_path,
+    low_memory=False
+)
+
+# Vérification des colonnes indispensables
+required_group_columns = [
+    "directors_text",
+    "actors_text",
+    "genres_text",
+]
+
+missing_columns = [
+    column
+    for column in required_group_columns
+    if column not in df_group.columns
+]
+
+if missing_columns:
+    raise ValueError(
+        "Colonnes manquantes dans df_clean.csv pour Group To Film : "
+        + ", ".join(missing_columns)
+    )
+
+# Nettoyage des colonnes
+for column in required_group_columns:
+    df_group[column] = (
+        df_group[column]
+        .fillna("")
+        .astype(str)
+        .str.lower()
+    )
+
+# Le texte est construit dans le même ordre que df_clean.csv.
+# Cela garantit que les indices de tfidf_matrix correspondent
+# exactement aux lignes de df_group dans app.py.
+df_group["group_features"] = (
+    df_group["genres_text"]
+    + " "
+    + df_group["actors_text"]
+    + " "
+    + df_group["directors_text"]
+)
+
+# Création et entraînement du vectoriseur
+tfidf_pipeline = TfidfVectorizer(
+    stop_words="english",
+    min_df=1,
+    ngram_range=(1, 2),
+)
+
+tfidf_matrix = tfidf_pipeline.fit_transform(
+    df_group["group_features"]
+)
+
+# Vérifications de sécurité
+if tfidf_matrix.shape[0] != len(df_group):
+    raise ValueError(
+        "Le nombre de lignes de la matrice TF-IDF ne correspond pas "
+        "au nombre de films dans df_clean.csv."
+    )
+
+if tfidf_matrix.shape[1] == 0:
+    raise ValueError(
+        "La matrice TF-IDF ne contient aucune caractéristique."
+    )
+
+# Sauvegarde atomique du pipeline TF-IDF
+tfidf_pipeline_path = os.path.join(
+    BASE_DIR,
+    "tfidf_pipeline.joblib"
+)
+
+tfidf_pipeline_tmp = tfidf_pipeline_path + ".tmp"
+
+joblib.dump(
+    tfidf_pipeline,
+    tfidf_pipeline_tmp
+)
+
+os.replace(
+    tfidf_pipeline_tmp,
+    tfidf_pipeline_path
+)
+
+# Sauvegarde atomique de la matrice TF-IDF
+tfidf_matrix_path = os.path.join(
+    BASE_DIR,
+    "tfidf_matrix.joblib"
+)
+
+tfidf_matrix_tmp = tfidf_matrix_path + ".tmp"
+
+joblib.dump(
+    tfidf_matrix,
+    tfidf_matrix_tmp
+)
+
+os.replace(
+    tfidf_matrix_tmp,
+    tfidf_matrix_path
+)
+
+print(
+    "Modèle Group To Film entraîné :",
+    tfidf_matrix.shape[0],
+    "films et",
+    tfidf_matrix.shape[1],
+    "caractéristiques."
+)
+
+print(
+    "Pipeline TF-IDF sauvegardée sous :",
+    tfidf_pipeline_path
+)
+
+print(
+    "Matrice TF-IDF sauvegardée sous :",
+    tfidf_matrix_path
+)
+
+
+
+
 print("Données des films sauvegardées sous 'movies_data_for_app_weighted.csv'")
 
 print("\nProcessus d'entraînement et de sauvegarde terminé avec pondération des features.")
@@ -121,6 +269,5 @@ Explications des modifications :
     pipeline.fit(df) :
         Contrairement à avant où on passait seulement df['features'], maintenant on passe le DataFrame df entier à pipeline.fit(). C'est parce que FeatureWeightingTransformer a besoin d'accéder à plusieurs colonnes (overview_clean, directors_name, etc.) pour faire son travail.
         Le FeatureWeightingTransformer prendra df, produira une Series de textes pondérés, et cette Series sera ensuite passée au TfidfVectorizer pour vectorisation.
-    Fichiers sauvegardés : J'ai renommé les fichiers .pkl et .csv pour indiquer qu'ils incluent la pondération (_weighted)..
+    Fichiers sauvegardés : J'ai renommé les fichiers .pkl et .csv pour indiquer qu'ils incluent la pondération (_weighted).
 '''
-
